@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angkatan Tujuh - Memory Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .login-box {
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        /* Main App */
+        .app-screen {
+            display: none;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-btn.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .gallery-info {
+            padding: 10px;
+            background: white;
+        }
+
+        .gallery-actions {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: none;
+        }
+
+        .gallery-item:hover .gallery-actions {
+            display: block;
+        }
+
+        /* Comments */
+        .comments-section {
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .comment-actions {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: none;
+        }
+
+        .comment:hover .comment-actions {
+            display: block;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #667eea;
+            cursor: pointer;
+        }
+
+        .comment-author:hover {
+            text-decoration: underline;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+        }
+
+        .comment-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Wall Messages */
+        .wall-messages {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .message-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .message-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none;
+        }
+
+        .message-card:hover .message-actions {
+            display: block;
+        }
+
+        .message-author {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .message-author:hover {
+            text-decoration: underline;
+        }
+
+        .message-content {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .post-btn, .upload-btn, .edit-profile-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .small-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 2px;
+            font-size: 0.8em;
+        }
+
+        .approve-btn {
+            background: #00b894;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .reject-btn {
+            background: #ff7675;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .delete-btn {
+            background: #e17055;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 2px;
+            font-size: 0.8em;
+        }
+
+        /* Badges */
+        .member-badge {
+            background: #ffeaa7;
+            color: #e17055;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .pending-badge {
+            background: #74b9ff;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .admin-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .alumni-badge {
+            background: #a29bfe;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        /* Notifications */
+        .notification-badge {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7em;
+            margin-left: 5px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* Pending Requests */
+        .pending-request {
+            background: #fff9c4;
+            border: 2px solid #ffd600;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Upload Progress */
+        .upload-progress {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Profile Display */
+        .profile-display {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        /* Member List */
+        .member-card {
+            position: relative;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .member-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Admin Tabs */
+        .admin-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .admin-tabs .nav-btn {
+            border-bottom: 3px solid transparent;
+        }
+
+        .admin-tabs .nav-btn.active {
+            border-bottom-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div class="login-screen" id="loginScreen">
+            <div class="login-box">
+                <h1>🎓 ANGKATAN TUJUH</h1>
+                <p>Masuk dengan nama kamu</p>
+                <input type="text" class="login-input" id="nameInput" placeholder="Masukkan nama lengkap kamu">
+                <button class="login-btn" onclick="login()">🚪 Masuk ke Angkatan</button>
+                <div id="loginMessage" style="margin-top: 15px; color: #ffeaa7;"></div>
+            </div>
+        </div>
+
+        <!-- Main App -->
+        <div class="app-screen" id="appScreen">
+            <!-- Header -->
+            <div class="header">
+                <h1>🎓 ANGKATAN TUJUH</h1>
+                <p>Digital Memory & Connection</p>
+            </div>
+
+            <!-- Navigation -->
+            <div class="nav">
+                <button class="nav-btn active" onclick="showSection('gallery')">📸 Gallery Foto</button>
+                <button class="nav-btn" onclick="showSection('wall')">💬 Papan Kata</button>
+                <button class="nav-btn" onclick="showSection('members')">👥 Anggota</button>
+                <button class="nav-btn" onclick="showSection('profile')" id="profileBtn">👤 Profile Saya</button>
+                <button class="nav-btn" onclick="showSection('admin')" id="adminBtn" style="display: none;">
+                    👑 Admin 
+                    <span id="notificationCount" class="notification-badge" style="display: none;">0</span>
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Gallery Section -->
+                <div class="section" id="gallerySection">
+                    <h2>📸 Gallery Foto Angkatan</h2>
+                    <div class="gallery-upload" id="uploadSection">
+                        <button class="upload-btn" onclick="showUploadModal()">📤 Upload Foto Baru</button>
+                    </div>
+                    <div class="gallery-grid" id="galleryGrid">
+                        <!-- Photos will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Wall Messages Section -->
+                <div class="section" id="wallSection" style="display: none;">
+                    <h2>💬 Papan Kata Angkatan</h2>
+                    <div class="new-message" id="newMessageSection">
+                        <textarea class="message-input" id="messageInput" placeholder="Tulis pesan atau kenangan kamu..."></textarea>
+                        <button class="post-btn" onclick="postMessage()">📝 Post Message</button>
+                    </div>
+                    <div class="wall-messages" id="wallMessages">
+                        <!-- Messages will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Members Section -->
+                <div class="section" id="membersSection" style="display: none;">
+                    <h2>👥 Daftar Anggota Angkatan</h2>
+                    <div id="membersList">
+                        <!-- Members list will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="section" id="profileSection" style="display: none;">
+                    <div id="profileContent">
+                        <!-- Profile content will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Admin Section -->
+                <div class="section" id="adminSection" style="display: none;">
+                    <h2>👑 Admin Panel</h2>
+                    <div class="admin-tabs">
+                        <button class="nav-btn active" onclick="showAdminTab('requests')">📨 Permintaan Bergabung</button>
+                        <button class="nav-btn" onclick="showAdminTab('manage')">👥 Kelola Anggota</button>
+                        <button class="nav-btn" onclick="showAdminTab('content')">🗂️ Kelola Konten</button>
+                    </div>
+                    
+                    <div id="adminRequestsTab">
+                        <h3>Permintaan Bergabung</h3>
+                        <div id="pendingRequests">
+                            <!-- Pending requests will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div id="adminManageTab" style="display: none;">
+                        <h3>Kelola Anggota</h3>
+                        <div id="manageMembers">
+                            <!-- Manage members will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div id="adminContentTab" style="display: none;">
+                        <h3>Kelola Konten</h3>
+                        <div class="content-management">
+                            <h4>Foto Gallery</h4>
+                            <div id="manageGallery">
+                                <!-- Gallery management will be loaded here -->
+                            </div>
+                            
+                            <h4>Wall Messages</h4>
+                            <div id="manageWall">
+                                <!-- Wall management will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Photo Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeUploadModal()">&times;</span>
+            <h3>📤 Upload Foto Baru</h3>
+            <div class="form-group">
+                <input type="file" id="photoUpload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <textarea id="photoCaption" placeholder="Tulis caption untuk foto ini..." rows="3"></textarea>
+            </div>
+            <div class="upload-progress" id="uploadProgress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <button class="post-btn" onclick="uploadPhoto()" id="uploadButton">Upload Foto</button>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeProfileModal()">&times;</span>
+            <h3>✏️ Edit Profile</h3>
+            <div class="form-group">
+                <label>Foto Profile</label>
+                <input type="file" id="profilePicUpload" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Status Saat Ini</label>
+                <input type="text" id="profileStatusInput" placeholder="Contoh: Mahasiswa, Bekerja, dll">
+            </div>
+            <div class="form-group">
+                <label>Bio</label>
+                <textarea id="profileBio" placeholder="Cerita singkat tentang kamu..." rows="4"></textarea>
+            </div>
+            <button class="post-btn" onclick="saveProfile()">Simpan Profile</button>
+        </div>
+    </div>
+
+    <!-- View Profile Modal -->
+    <div class="modal" id="viewProfileModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeViewProfileModal()">&times;</span>
+            <div id="viewProfileContent">
+                <!-- Profile content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Join Request Modal -->
+    <div class="modal" id="joinModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeJoinModal()">&times;</span>
+            <h3>📝 Formulir Pendaftaran Anggota</h3>
+            <p>Isi data diri lengkap untuk bergabung dengan angkatan</p>
+            
+            <div class="form-group">
+                <label>Nama Lengkap *</label>
+                <input type="text" id="formNama" value="" readonly style="background: #f0f0f0;">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Kelas *</label>
+                    <select id="formKelas" required onchange="checkAlumniStatus()">
+                        <option value="">Pilih Kelas</option>
+                        <option value="1 TD">1 TD</option>
+                        <option value="2 TD">2 TD</option>
+                        <option value="3 TD">3 TD</option>
+                        <option value="4 TD">4 TD</option>
+                        <option value="5 TD">5 TD</option>
+                        <option value="Mantan Angkatan 7">Mantan Angkatan 7</option>
+                    </select>
+                </div>
+                <div class="form-group" id="absenGroup">
+                    <label>No. Absen *</label>
+                    <input type="number" id="formAbsen" placeholder="Nomor absen" min="1" max="50" required>
+                </div>
+            </div>
+
+            <div class="form-group" id="ortuGroup">
+                <label>Nama Orang Tua *</label>
+                <input type="text" id="formOrtu" placeholder="Nama lengkap orang tua" required>
+            </div>
+
+            <div class="form-group">
+                <label>Daerah Asal *</label>
+                <input type="text" id="formDaerah" placeholder="Kota/Kabupaten asal" required>
+            </div>
+
+            <div class="form-group">
+                <label>Instagram</label>
+                <input type="text" id="formInstagram" placeholder="@username Instagram (opsional)">
+            </div>
+
+            <div class="form-group">
+                <label>Alasan Mau Bergabung *</label>
+                <textarea id="formAlasan" placeholder="Ceritakan mengapa kamu ingin bergabung..." rows="3" required></textarea>
+            </div>
+
+            <button class="post-btn" onclick="submitJoinRequest()">📨 Kirim Formulir</button>
+            <button class="login-btn" onclick="continueAsGuest()" style="background: #666; margin-top: 10px;">👀 Lanjut sebagai Tamu</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5SoEMSa7HqdMl0Ssaupc-Z8OByR2E1aQ",
+            authDomain: "testing-47f1e.firebaseapp.com",
+            databaseURL: "https://testing-47f1e-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "testing-47f1e",
+            storageBucket: "testing-47f1e.firebasestorage.app",
+            messagingSenderId: "1036606294271",
+            appId: "1:1036606294271:web:3e556aeaeaca7c75bee4ca",
+            measurementId: "G-83R71BXDDW"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const storage = firebase.storage();
+
+        // Global variables
+        let currentUser = null;
+        let isMember = false;
+        let isAdmin = false;
+        let isAlumni = false;
+        let userProfileData = null;
+        
+        // ADMIN SYSTEM
+        const ADMIN_USERS = {
+            'zava': 'Ketua Angkatan',
+            'admin': 'Admin System'
+        };
+
+        // Login function - FIXED: Setup realtime listeners untuk admin
+        window.login = function() {
+            const nameInput = document.getElementById('nameInput');
+            const userName = nameInput.value.trim();
+            
+            if (!userName) {
+                showLoginMessage('Masukkan nama kamu dulu!');
+                return;
+            }
+
+            currentUser = userName;
+            isAdmin = (userName.toLowerCase() in ADMIN_USERS);
+            
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'block';
+            
+            // Setup real-time listeners DULU
+            setupRealtimeListeners();
+            
+            if (isAdmin) {
+                isMember = true;
+                setupMemberFeatures();
+                loadUserProfile();
+                // Load data khusus admin
+                loadPendingRequests();
+                loadManageMembers();
+                loadContentManagement();
+            } else {
+                checkUserStatus();
+            }
+            
+            loadGallery();
+            loadWallMessages();
+            loadMembersList();
+            showSection('gallery');
+        }
+
+        // Setup real-time listeners - FIXED: Include admin notifications
+        function setupRealtimeListeners() {
+            // Listen for membership status changes (hanya untuk non-admin)
+            if (!isAdmin) {
+                const displayName = getDisplayName();
+                const memberRef = database.ref('angkatan7/members/' + displayName.toLowerCase());
+                memberRef.on('value', (snapshot) => {
+                    const memberData = snapshot.val();
+                    if ((memberData === true || memberData === 'alumni') && !isMember) {
+                        isMember = true;
+                        isAlumni = (memberData === 'alumni');
+                        alert('🎉 Selamat! Kamu sekarang jadi anggota resmi!');
+                        loadUserProfile();
+                        setupMemberFeatures();
+                    }
+                });
+            }
+
+            // Untuk ADMIN: Listen untuk join requests
+            if (isAdmin) {
+                const requestsRef = database.ref('angkatan7/join_requests');
+                requestsRef.on('value', () => {
+                    loadPendingRequests();
+                });
+            }
+        }
+
+        // Check user status untuk non-admin
+        function checkUserStatus() {
+            const displayName = getDisplayName();
+            const membersRef = database.ref('angkatan7/members/' + displayName.toLowerCase());
+            
+            membersRef.once('value').then((snapshot) => {
+                const memberData = snapshot.val();
+                
+                if (memberData === true || memberData === 'alumni') {
+                    isMember = true;
+                    isAlumni = (memberData === 'alumni');
+                    loadUserProfile();
+                    setupMemberFeatures();
+                } else if (memberData && memberData.status === 'pending') {
+                    showPendingStatus();
+                } else {
+                    showJoinModal();
+                }
+            });
+        }
+
+        // Get display name
+        function getDisplayName() {
+            return isAdmin ? ADMIN_USERS[currentUser.toLowerCase()] : currentUser;
+        }
+
+        // Setup features untuk members
+        function setupMemberFeatures() {
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('newMessageSection').style.display = 'block';
+            document.getElementById('profileBtn').style.display = 'block';
+            
+            if (isAdmin) {
+                document.getElementById('adminBtn').style.display = 'block';
+            }
+        }
+
+        // Check alumni status pada form
+        window.checkAlumniStatus = function() {
+            const kelas = document.getElementById('formKelas').value;
+            const isAlumni = (kelas === 'Mantan Angkatan 7');
+            
+            if (isAlumni) {
+                document.getElementById('absenGroup').style.display = 'none';
+                document.getElementById('ortuGroup').style.display = 'none';
+                document.getElementById('formAbsen').required = false;
+                document.getElementById('formOrtu').required = false;
+            } else {
+                document.getElementById('absenGroup').style.display = 'block';
+                document.getElementById('ortuGroup').style.display = 'block';
+                document.getElementById('formAbsen').required = true;
+                document.getElementById('formOrtu').required = true;
+            }
+        }
+
+        // Submit join request
+        window.submitJoinRequest = function() {
+            const kelas = document.getElementById('formKelas').value;
+            const absen = document.getElementById('formAbsen').value;
+            const ortu = document.getElementById('formOrtu').value;
+            const daerah = document.getElementById('formDaerah').value;
+            const instagram = document.getElementById('formInstagram').value;
+            const alasan = document.getElementById('formAlasan').value;
+
+            const isAlumniForm = (kelas === 'Mantan Angkatan 7');
+            
+            // Validasi form
+            if (!kelas || !daerah || !alasan) {
+                alert('Harap isi semua field yang wajib (*)');
+                return;
+            }
+
+            if (!isAlumniForm && (!absen || !ortu)) {
+                alert('Harap isi semua field yang wajib (*)');
+                return;
+            }
+
+            const requestData = {
+                nama: currentUser,
+                kelas: kelas,
+                daerahAsal: daerah,
+                instagram: instagram || '-',
+                alasan: alasan,
+                timestamp: Date.now(),
+                status: 'pending',
+                isAlumni: isAlumniForm
+            };
+
+            // Tambahkan field khusus untuk non-alumni
+            if (!isAlumniForm) {
+                requestData.absen = parseInt(absen);
+                requestData.orangTua = ortu;
+            }
+
+            // Save join request
+            const requestRef = database.ref('angkatan7/join_requests/' + currentUser);
+            requestRef.set(requestData);
+
+            // Add to members as pending
+            const memberRef = database.ref('angkatan7/members/' + currentUser.toLowerCase());
+            memberRef.set({
+                status: 'pending',
+                requestedAt: Date.now(),
+                isAlumni: isAlumniForm
+            });
+
+            alert('✅ Formulir pendaftaran telah dikirim! ' + (isAlumniForm ? 'Kamu akan langsung menjadi anggota setelah approval.' : 'Tunggu approval dari Admin.'));
+            closeJoinModal();
+            showPendingStatus();
+        }
+
+        // Load members list - FIXED: Tampilkan SEMUA anggota (kecuali admin)
+        function loadMembersList() {
+            const membersRef = database.ref('angkatan7/members');
+            membersRef.on('value', (snapshot) => {
+                const members = snapshot.val();
+                const membersList = document.getElementById('membersList');
+                
+                membersList.innerHTML = '';
+                
+                if (members) {
+                    const profilesRef = database.ref('angkatan7/profiles');
+                    profilesRef.once('value').then((profilesSnapshot) => {
+                        const profiles = profilesSnapshot.val();
+                        
+                        Object.entries(members).forEach(([username, memberData]) => {
+                            // Hanya tampilkan approved members (bukan admin)
+                            const isAdminUser = (username in ADMIN_USERS);
+                            const isApproved = (memberData === true || memberData === 'alumni');
+                            
+                            if (isApproved && !isAdminUser) {
+                                const displayName = ADMIN_USERS[username] || username;
+                                const profile = profiles ? profiles[displayName] : null;
+                                const isAlumniMember = (memberData === 'alumni');
+                                
+                                // FIXED: Alumni tidak tampil "Failed"
+                                const kelasDisplay = profile?.kelas || (isAlumniMember ? 'Mantan Angkatan 7' : 'Failed');
+                                const absenDisplay = profile?.absen || (isAlumniMember ? '-' : 'Failed');
+                                const daerahDisplay = profile?.daerahAsal || 'Failed';
+                                
+                                const memberElement = `
+                                    <div class="member-card" onclick="viewProfile('${displayName}')">
+                                        <div class="message-author">
+                                            ${displayName}
+                                            ${isAlumniMember ? 
+                                                '<span class="alumni-badge">ALUMNI</span>' : 
+                                                '<span class="member-badge">ANGGOTA</span>'}
+                                        </div>
+                                        <div class="message-content">
+                                            <strong>Kelas:</strong> ${kelasDisplay}
+                                            ${absenDisplay !== '-' ? ` | <strong>Absen:</strong> ${absenDisplay}` : ''}
+                                            <br>
+                                            <strong>Daerah:</strong> ${daerahDisplay}
+                                        </div>
+                                    </div>
+                                `;
+                                membersList.innerHTML += memberElement;
+                            }
+                        });
+                        
+                        if (membersList.innerHTML === '') {
+                            membersList.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">Belum ada anggota terdaftar.</p>';
+                        }
+                    });
+                } else {
+                    membersList.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">Belum ada anggota terdaftar.</p>';
+                }
+            });
+        }
+
+        // View profile function
+        window.viewProfile = function(username) {
+            const profileRef = database.ref('angkatan7/profiles/' + username);
+            profileRef.once('value').then((snapshot) => {
+                const profile = snapshot.val();
+                
+                if (profile) {
+                    // Cek status member untuk menentukan badge
+                    const membersRef = database.ref('angkatan7/members/' + username.toLowerCase());
+                    membersRef.once('value').then((memberSnapshot) => {
+                        const memberData = memberSnapshot.val();
+                        const isAlumniProfile = (memberData === 'alumni');
+                        
+                        const profileHTML = `
+                            <div class="profile-display">
+                                <img src="${profile.photoURL || 'https://via.placeholder.com/150?text=No+Photo'}" 
+                                     alt="Profile" class="profile-avatar">
+                                <h2>${profile.nama || username}</h2>
+                                <p style="color: #666; margin-bottom: 20px;">
+                                    ${isAlumniProfile ? 'Alumni Angkatan Tujuh' : (profile.status || 'Anggota Angkatan Tujuh')}
+                                </p>
+                                
+                                <div class="profile-info">
+                                    <div class="info-item">
+                                        <span class="info-label">Kelas:</span>
+                                        <span class="info-value">${profile.kelas || (isAlumniProfile ? 'Mantan Angkatan 7' : 'Failed')}</span>
+                                    </div>
+                                    ${profile.absen ? `
+                                    <div class="info-item">
+                                        <span class="info-label">No. Absen:</span>
+                                        <span class="info-value">${profile.absen}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${profile.orangTua ? `
+                                    <div class="info-item">
+                                        <span class="info-label">Orang Tua:</span>
+                                        <span class="info-value">${profile.orangTua}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${profile.daerahAsal ? `
+                                    <div class="info-item">
+                                        <span class="info-label">Daerah Asal:</span>
+                                        <span class="info-value">${profile.daerahAsal}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${profile.instagram && profile.instagram !== '-' ? `
+                                    <div class="info-item">
+                                        <span class="info-label">Instagram:</span>
+                                        <span class="info-value">${profile.instagram}</span>
+                                    </div>
+                                    ` : ''}
+                                    <div class="info-item">
+                                        <span class="info-label">Bio:</span>
+                                        <span class="info-value">${profile.bio || 'Belum ada bio'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('viewProfileContent').innerHTML = profileHTML;
+                        document.getElementById('viewProfileModal').style.display = 'flex';
+                    });
+                } else {
+                    alert('Profile tidak ditemukan!');
+                }
+            });
+        }
+
+        window.closeViewProfileModal = function() {
+            document.getElementById('viewProfileModal').style.display = 'none';
+        }
+
+        // Load pending requests - FIXED: Pastikan ter-load untuk admin
+        function loadPendingRequests() {
+            if (!isAdmin) return;
+            
+            const requestsRef = database.ref('angkatan7/join_requests');
+            requestsRef.on('value', (snapshot) => {
+                const requests = snapshot.val();
+                const pendingDiv = document.getElementById('pendingRequests');
+                let pendingCount = 0;
+                
+                pendingDiv.innerHTML = '';
+                
+                if (requests) {
+                    Object.entries(requests).forEach(([username, request]) => {
+                        if (request.status === 'pending') {
+                            pendingCount++;
+                            const requestElement = `
+                                <div class="pending-request">
+                                    <div class="message-author">
+                                        ${request.nama}
+                                        <span class="pending-badge">MENUNGGU APPROVAL</span>
+                                        ${request.isAlumni ? '<span class="alumni-badge">ALUMNI</span>' : ''}
+                                    </div>
+                                    <div class="message-content">
+                                        <strong>Kelas:</strong> ${request.kelas} 
+                                        ${request.absen ? `| <strong>Absen:</strong> ${request.absen}` : ''}
+                                        <br>
+                                        ${request.orangTua ? `<strong>Orang Tua:</strong> ${request.orangTua}<br>` : ''}
+                                        <strong>Daerah Asal:</strong> ${request.daerahAsal}<br>
+                                        <strong>Instagram:</strong> ${request.instagram}<br>
+                                        <strong>Alasan:</strong> ${request.alasan}
+                                    </div>
+                                    <div style="margin-top: 10px;">
+                                        <strong>Request pada:</strong> ${new Date(request.timestamp).toLocaleString('id-ID')}
+                                    </div>
+                                    <div style="margin-top: 15px;">
+                                        <button class="approve-btn" onclick="approveRequest('${username}')">✅ Approve</button>
+                                        <button class="reject-btn" onclick="rejectRequest('${username}')">❌ Tolak</button>
+                                    </div>
+                                </div>
+                            `;
+                            pendingDiv.innerHTML += requestElement;
+                        }
+                    });
+                }
+                
+                if (pendingDiv.innerHTML === '') {
+                    pendingDiv.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">Tidak ada permintaan bergabung.</p>';
+                }
+                
+                // Update notification badge
+                const notificationBadge = document.getElementById('notificationCount');
+                if (pendingCount > 0) {
+                    notificationBadge.textContent = pendingCount;
+                    notificationBadge.style.display = 'inline';
+                } else {
+                    notificationBadge.style.display = 'none';
+                }
+            });
+        }
+
+        // Approve request - FIXED: Handle alumni dan regular
+        window.approveRequest = function(username) {
+            if (!isAdmin) return;
+
+            const requestRef = database.ref('angkatan7/join_requests/' + username);
+            requestRef.once('value').then((snapshot) => {
+                const requestData = snapshot.val();
+                
+                if (requestData) {
+                    // Save ke profiles
+                    const profileRef = database.ref('angkatan7/profiles/' + username);
+                    const profileData = {
+                        nama: requestData.nama,
+                        kelas: requestData.kelas,
+                        daerahAsal: requestData.daerahAsal,
+                        instagram: requestData.instagram,
+                        joinedAt: Date.now()
+                    };
+
+                    // Tambahkan field khusus untuk non-alumni
+                    if (!requestData.isAlumni) {
+                        profileData.absen = requestData.absen;
+                        profileData.orangTua = requestData.orangTua;
+                    }
+
+                    profileRef.set(profileData);
+                }
+
+                // Update join request status
+                requestRef.update({
+                    status: 'approved',
+                    approvedBy: getDisplayName(),
+                    approvedAt: Date.now()
+                });
+
+                // Add to approved members (alumni atau regular)
+                const memberRef = database.ref('angkatan7/members/' + username.toLowerCase());
+                const memberStatus = requestData.isAlumni ? 'alumni' : true;
+                memberRef.set(memberStatus);
+
+                alert('✅ ' + username + ' telah disetujui menjadi anggota!');
+            });
+        }
+
+        // Reject request
+        window.rejectRequest = function(username) {
+            if (!isAdmin) return;
+            
+            if (confirm('Yakin mau menolak ' + username + '?')) {
+                const requestRef = database.ref('angkatan7/join_requests/' + username);
+                requestRef.update({
+                    status: 'rejected',
+                    rejectedBy: getDisplayName(),
+                    rejectedAt: Date.now()
+                });
+
+                // Remove from members
+                const memberRef = database.ref('angkatan7/members/' + username.toLowerCase());
+                memberRef.remove();
+            }
+        }
+
+        // Load manage members untuk admin
+        function loadManageMembers() {
+            if (!isAdmin) return;
+            
+            const membersRef = database.ref('angkatan7/members');
+            membersRef.on('value', (snapshot) => {
+                const members = snapshot.val();
+                const manageDiv = document.getElementById('manageMembers');
+                
+                manageDiv.innerHTML = '';
+                
+                if (members) {
+                    const profilesRef = database.ref('angkatan7/profiles');
+                    profilesRef.once('value').then((profilesSnapshot) => {
+                        const profiles = profilesSnapshot.val();
+                        
+                        Object.entries(members).forEach(([username, memberData]) => {
+                            const isAdminUser = (username in ADMIN_USERS);
+                            const isApproved = (memberData === true || memberData === 'alumni');
+                            
+                            if (isApproved && !isAdminUser) {
+                                const displayName = ADMIN_USERS[username] || username;
+                                const profile = profiles ? profiles[displayName] : null;
+                                const isAlumniMember = (memberData === 'alumni');
+                                
+                                const memberElement = `
+                                    <div class="member-card">
+                                        <div class="member-actions">
+                                            <button class="delete-btn" onclick="deleteMember('${username}')">🗑️ Hapus</button>
+                                        </div>
+                                        <div class="message-author">
+                                            ${displayName}
+                                            ${isAlumniMember ? 
+                                                '<span class="alumni-badge">ALUMNI</span>' : 
+                                                '<span class="member-badge">ANGGOTA</span>'}
+                                        </div>
+                                        <div class="message-content">
+                                            <strong>Kelas:</strong> ${profile?.kelas || (isAlumniMember ? 'Mantan Angkatan 7' : 'Failed')}
+                                            ${profile?.absen ? ` | <strong>Absen:</strong> ${profile.absen}` : ''}
+                                            <br>
+                                            <strong>Daerah:</strong> ${profile?.daerahAsal || 'Failed'}
+                                            ${profile?.orangTua ? `<br><strong>Orang Tua:</strong> ${profile.orangTua}` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                                manageDiv.innerHTML += memberElement;
+                            }
+                        });
+                        
+                        if (manageDiv.innerHTML === '') {
+                            manageDiv.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">Tidak ada anggota untuk dikelola.</p>';
+                        }
+                    });
+                }
+            });
+        }
+
+        // Delete member function
+        window.deleteMember = function(username) {
+            if (!isAdmin) return;
+
+            if (confirm(`Yakin ingin menghapus ${username} dari anggota?`)) {
+                // Remove from members
+                const memberRef = database.ref('angkatan7/members/' + username.toLowerCase());
+                memberRef.remove();
+
+                // Remove profile data
+                const profileRef = database.ref('angkatan7/profiles/' + username);
+                profileRef.remove();
+
+                // Remove from join_requests if exists
+                const requestRef = database.ref('angkatan7/join_requests/' + username);
+                requestRef.remove();
+
+                alert('✅ Anggota ' + username + ' berhasil dihapus!');
+                
+                // Reload lists
+                loadMembersList();
+                loadManageMembers();
+            }
+        }
+
+        // Admin content management
+        function loadContentManagement() {
+            if (!isAdmin) return;
+            
+            loadManageGallery();
+            loadManageWall();
+        }
+
+        function loadManageGallery() {
+            const galleryRef = database.ref('angkatan7/gallery');
+            galleryRef.on('value', (snapshot) => {
+                const photos = snapshot.val();
+                const manageGallery = document.getElementById('manageGallery');
+                
+                manageGallery.innerHTML = '';
+                
+                if (photos) {
+                    Object.entries(photos).forEach(([key, photo]) => {
+                        const photoElement = `
+                            <div class="message-card">
+                                <div class="message-actions">
+                                    <button class="delete-btn" onclick="deletePhoto('${key}')">🗑️ Hapus</button>
+                                </div>
+                                <img src="${photo.url}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
+                                <div class="message-author">${photo.author}</div>
+                                <div class="message-content">${photo.caption}</div>
+                                <small>${new Date(photo.timestamp).toLocaleString('id-ID')}</small>
+                            </div>
+                        `;
+                        manageGallery.innerHTML += photoElement;
+                    });
+                } else {
+                    manageGallery.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">Tidak ada foto.</p>';
+                }
+            });
+        }
+
+        function loadManageWall() {
+            const wallRef = database.ref('angkatan7/wall');
+            wallRef.on('value', (snapshot) => {
+                const messages = snapshot.val();
+                const manageWall = document.getElementById('manageWall');
+                
+                manageWall.innerHTML = '';
+                
+                if (messages) {
+                    Object.entries(messages).forEach(([key, message]) => {
+                        const messageElement = `
+                            <div class="message-card">
+                                <div class="message-actions">
+                                    <button class="delete-btn" onclick="deleteWallMessage('${key}')">🗑️ Hapus</button>
+                                </div>
+                                <div class="message-author">${message.author}</div>
+                                <div class="message-content">${message.text}</div>
+                                <small>${new Date(message.timestamp).toLocaleString('id-ID')}</small>
+                            </div>
+                        `;
+                        manageWall.innerHTML += messageElement;
+                    });
+                } else {
+                    manageWall.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">Tidak ada pesan.</p>';
+                }
+            });
+        }
+
+        // Admin delete functions
+        window.deletePhoto = function(photoKey) {
+            if (!isAdmin) return;
+            
+            if (confirm('Yakin ingin menghapus foto ini?')) {
+                const photoRef = database.ref('angkatan7/gallery/' + photoKey);
+                photoRef.remove();
+                alert('✅ Foto berhasil dihapus!');
+            }
+        }
+
+        window.deleteWallMessage = function(messageKey) {
+            if (!isAdmin) return;
+            
+            if (confirm('Yakin ingin menghapus pesan ini?')) {
+                const messageRef = database.ref('angkatan7/wall/' + messageKey);
+                messageRef.remove();
+                alert('✅ Pesan berhasil dihapus!');
+            }
+        }
+
+        window.deleteComment = function(photoKey, commentKey) {
+            if (!isAdmin) return;
+            
+            if (confirm('Yakin ingin menghapus komentar ini?')) {
+                const commentRef = database.ref(`angkatan7/gallery/${photoKey}/comments/${commentKey}`);
+                commentRef.remove();
+            }
+        }
+
+        window.deleteWallComment = function(messageKey, commentKey) {
+            if (!isAdmin) return;
+            
+            if (confirm('Yakin ingin menghapus komentar ini?')) {
+                const commentRef = database.ref(`angkatan7/wall/${messageKey}/comments/${commentKey}`);
+                commentRef.remove();
+            }
+        }
+
+        // Admin tabs
+        window.showAdminTab = function(tabName) {
+            document.getElementById('adminRequestsTab').style.display = 'none';
+            document.getElementById('adminManageTab').style.display = 'none';
+            document.getElementById('adminContentTab').style.display = 'none';
+            
+            document.querySelectorAll('.admin-tabs .nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById('admin' + (tabName.charAt(0).toUpperCase() + tabName.slice(1)) + 'Tab').style.display = 'block';
+            event.target.classList.add('active');
+
+            if (tabName === 'manage') {
+                loadManageMembers();
+            } else if (tabName === 'content') {
+                loadContentManagement();
+            }
+        }
+
+        // [REST OF THE FUNCTIONS REMAIN THE SAME...]
+        // showSection(), showJoinModal(), loadUserProfile(), uploadPhoto(), dll.
+
+        // Show section
+        window.showSection = function(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(sectionName + 'Section').style.display = 'block';
+            event.target.classList.add('active');
+
+            if (sectionName === 'admin' && isAdmin) {
+                loadPendingRequests();
+            }
+            
+            if (sectionName === 'profile' && isMember) {
+                loadUserProfile();
+            }
+        }
+
+        // Show join modal
+        function showJoinModal() {
+            document.getElementById('formNama').value = currentUser;
+            document.getElementById('joinModal').style.display = 'flex';
+            checkAlumniStatus();
+        }
+
+        window.closeJoinModal = function() {
+            document.getElementById('joinModal').style.display = 'none';
+        }
+
+        window.continueAsGuest = function() {
+            closeJoinModal();
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('newMessageSection').style.display = 'none';
+            showGuestProfile();
+        }
+
+        // Show pending status
+        function showPendingStatus() {
+            document.getElementById('profileContent').innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h3>⏳ Menunggu Approval</h3>
+                    <p>Formulir pendaftaran kamu sedang ditinjau oleh Admin</p>
+                    <p>Kamu bisa lihat gallery dan kasih komentar sambil menunggu</p>
+                </div>
+            `;
+        }
+
+        // Show guest profile
+        function showGuestProfile() {
+            document.getElementById('profileContent').innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h3>👋 Hai ${currentUser}!</h3>
+                    <p>Kamu sedang mengakses sebagai tamu</p>
+                    <p>Isi formulir pendaftaran untuk menjadi anggota resmi!</p>
+                    <button class="post-btn" onclick="showJoinModal()">📝 Isi Formulir Pendaftaran</button>
+                </div>
+            `;
+        }
+
+        // Load user profile
+        function loadUserProfile() {
+            if (!isMember) return;
+            
+            const displayName = getDisplayName();
+            const profileRef = database.ref('angkatan7/profiles/' + displayName);
+            
+            profileRef.once('value').then((snapshot) => {
+                const profile = snapshot.val();
+                userProfileData = profile;
+                
+                if (profile && profile.nama) {
+                    showMemberProfile(profile, displayName);
+                } else {
+                    showEditProfileForm(displayName);
+                }
+            });
+        }
+
+        // Tampilkan profile member
+        function showMemberProfile(profile, displayName) {
+            const profileHTML = `
+                <div class="profile-display">
+                    <img src="${profile.photoURL || 'https://via.placeholder.com/150?text=No+Photo'}" 
+                         alt="Profile" class="profile-avatar">
+                    <h2>${profile.nama || displayName}</h2>
+                    <p style="color: #666; margin-bottom: 20px;">
+                        ${isAlumni ? 'Alumni Angkatan Tujuh' : (profile.status || 'Anggota Angkatan Tujuh')}
+                    </p>
+                    
+                    <div class="profile-info">
+                        <div class="info-item">
+                            <span class="info-label">Kelas:</span>
+                            <span class="info-value">${profile.kelas || (isAlumni ? 'Mantan Angkatan 7' : 'Failed')}</span>
+                        </div>
+                        ${profile.absen ? `
+                        <div class="info-item">
+                            <span class="info-label">No. Absen:</span>
+                            <span class="info-value">${profile.absen}</span>
+                        </div>
+                        ` : ''}
+                        ${profile.orangTua ? `
+                        <div class="info-item">
+                            <span class="info-label">Orang Tua:</span>
+                            <span class="info-value">${profile.orangTua}</span>
+                        </div>
+                        ` : ''}
+                        ${profile.daerahAsal ? `
+                        <div class="info-item">
+                            <span class="info-label">Daerah Asal:</span>
+                            <span class="info-value">${profile.daerahAsal}</span>
+                        </div>
+                        ` : ''}
+                        ${profile.instagram && profile.instagram !== '-' ? `
+                        <div class="info-item">
+                            <span class="info-label">Instagram:</span>
+                            <span class="info-value">${profile.instagram}</span>
+                        </div>
+                        ` : ''}
+                        <div class="info-item">
+                            <span class="info-label">Bio:</span>
+                            <span class="info-value">${profile.bio || 'Belum ada bio'}</span>
+                        </div>
+                    </div>
+                    
+                    <button class="edit-profile-btn" onclick="showProfileModal()" style="margin-top: 20px;">
+                        ✏️ Edit Profile
+                    </button>
+                </div>
+            `;
+            document.getElementById('profileContent').innerHTML = profileHTML;
+        }
+
+        // Tampilkan form edit
+        function showEditProfileForm(displayName) {
+            document.getElementById('profileContent').innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h3>👋 Selamat Datang ${displayName}!</h3>
+                    <p>Lengkapi profile kamu untuk pengalaman yang lebih baik</p>
+                    <button class="post-btn" onclick="showProfileModal()">✏️ Lengkapi Profile</button>
+                </div>
+            `;
+        }
+
+        // [FUNGSI LAINNYA YANG SAMA...]
+        // showProfileModal(), closeProfileModal(), saveProfile(), uploadPhoto(), 
+        // loadGallery(), loadWallMessages(), postMessage(), dll.
+
+        // Comment functions dengan admin controls
+        function loadComments(comments, photoKey) {
+            if (!comments) return '';
+            
+            const sortedComments = Object.entries(comments)
+                .sort((a, b) => a[1].timestamp - b[1].timestamp);
+            
+            return sortedComments.map(([commentKey, comment]) => `
+                <div class="comment">
+                    ${isAdmin ? `
+                    <div class="comment-actions">
+                        <button class="small-btn" onclick="deleteComment('${photoKey}', '${commentKey}')">🗑️</button>
+                    </div>
+                    ` : ''}
+                    <span class="comment-author" onclick="viewProfile('${comment.author}')">${comment.author}:</span> ${comment.text}
+                </div>
+            `).join('');
+        }
+
+        function loadWallComments(comments, messageKey) {
+            if (!comments) return '';
+            
+            const sortedComments = Object.entries(comments)
+                .sort((a, b) => a[1].timestamp - b[1].timestamp);
+            
+            return sortedComments.map(([commentKey, comment]) => `
+                <div class="comment">
+                    ${isAdmin ? `
+                    <div class="comment-actions">
+                        <button class="small-btn" onclick="deleteWallComment('${messageKey}', '${commentKey}')">🗑️</button>
+                    </div>
+                    ` : ''}
+                    <span class="comment-author" onclick="viewProfile('${comment.author}')">${comment.author}:</span> ${comment.text}
+                </div>
+            `).join('');
+        }
+
+        // Load gallery dengan admin controls
+        function loadGallery() {
+            const galleryRef = database.ref('angkatan7/gallery');
+            galleryRef.on('value', (snapshot) => {
+                const photos = snapshot.val();
+                const galleryGrid = document.getElementById('galleryGrid');
+                
+                galleryGrid.innerHTML = '';
+                
+                if (photos) {
+                    const sortedPhotos = Object.entries(photos)
+                        .sort((a, b) => b[1].timestamp - a[1].timestamp);
+                    
+                    sortedPhotos.forEach(([key, photo]) => {
+                        const photoElement = `
+                            <div class="gallery-item">
+                                ${isAdmin ? `
+                                <div class="gallery-actions">
+                                    <button class="small-btn" onclick="deletePhoto('${key}')">🗑️</button>
+                                </div>
+                                ` : ''}
+                                <img src="${photo.url}" alt="${photo.caption}" 
+                                     onerror="this.src='https://via.placeholder.com/200x200?text=Error+Loading+Image'">
+                                <div class="gallery-info">
+                                    <div class="comment-author" onclick="viewProfile('${photo.author}')">${photo.author}</div>
+                                    <p>${photo.caption}</p>
+                                    <div class="comments-section">
+                                        ${loadComments(photo.comments, key)}
+                                        <div class="comment-input">
+                                            <input type="text" placeholder="Tulis komentar..." 
+                                                   onkeypress="if(event.key=='Enter') addComment('${key}', this.value)">
+                                            <button class="comment-btn" onclick="addComment('${key}', this.previousElementSibling.value)">💬</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        galleryGrid.innerHTML += photoElement;
+                    });
+                } else {
+                    galleryGrid.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">Belum ada foto yang diupload. Jadilah yang pertama!</p>';
+                }
+            });
+        }
+
+        // Load wall messages dengan admin controls
+        function loadWallMessages() {
+            const wallRef = database.ref('angkatan7/wall');
+            wallRef.on('value', (snapshot) => {
+                const messages = snapshot.val();
+                const wallMessages = document.getElementById('wallMessages');
+                
+                wallMessages.innerHTML = '';
+                
+                if (messages) {
+                    Object.entries(messages).sort((a, b) => b[1].timestamp - a[1].timestamp).forEach(([key, message]) => {
+                        const messageElement = `
+                            <div class="message-card">
+                                ${isAdmin ? `
+                                <div class="message-actions">
+                                    <button class="small-btn" onclick="deleteWallMessage('${key}')">🗑️</button>
+                                </div>
+                                ` : ''}
+                                <div class="message-author" onclick="viewProfile('${message.author}')">${message.author}</div>
+                                <div class="message-content">${message.text}</div>
+                                <div class="comments-section">
+                                    ${loadWallComments(message.comments, key)}
+                                    <div class="comment-input">
+                                        <input type="text" placeholder="Tulis komentar..." 
+                                               onkeypress="if(event.key=='Enter') addWallComment('${key}', this.value)">
+                                        <button class="comment-btn" onclick="addWallComment('${key}', this.previousElementSibling.value)">💬</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        wallMessages.innerHTML += messageElement;
+                    });
+                }
+            });
+        }
+
+        // Show login message
+        function showLoginMessage(message) {
+            const messageElement = document.getElementById('loginMessage');
+            messageElement.textContent = message;
+            setTimeout(() => {
+                messageElement.textContent = '';
+            }, 3000);
+        }
+
+        // Enter key support for login
+        document.getElementById('nameInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+
+        // Initialize alumni form state
+        window.onload = function() {
+            checkAlumniStatus();
+        };
+    </script>
+</body>
+</html>
